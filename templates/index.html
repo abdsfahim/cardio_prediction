@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Cardiovascular Disease Prediction System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Global Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            background-color: #0d6efd;
+            padding: 20px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .btn {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: #218838;
+        }
+
+        .result {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            color: #0d6efd;
+            font-weight: 700;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 600px) {
+            .container {
+                padding: 15px;
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            input[type="text"], input[type="number"] {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            .btn {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Smart Cardiovascular Disease Prediction System</h1>
+
+        <form action="/predict" method="POST">
+            <label for="age">Age (in days):</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="gender">Gender (1 = Male, 2 = Female):</label>
+            <input type="number" id="gender" name="gender" required>
+
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" name="height" required>
+
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" name="weight" required>
+
+            <label for="ap_hi">Systolic BP (ap_hi):</label>
+            <input type="number" id="ap_hi" name="ap_hi" required>
+
+            <label for="ap_lo">Diastolic BP (ap_lo):</label>
+            <input type="number" id="ap_lo" name="ap_lo" required>
+
+            <label for="cholesterol">Cholesterol (1 = normal, 2 = above normal, 3 = well above normal):</label>
+            <input type="number" id="cholesterol" name="cholesterol" required>
+
+            <label for="gluc">Glucose (1 = normal, 2 = above normal, 3 = well above normal):</label>
+            <input type="number" id="gluc" name="gluc" required>
+
+            <label for="smoke">Smoke (1 = yes, 0 = no):</label>
+            <input type="number" id="smoke" name="smoke" required>
+
+            <label for="alco">Alcohol Intake (1 = yes, 0 = no):</label>
+            <input type="number" id="alco" name="alco" required>
+
+            <label for="active">Physical Activity (1 = yes, 0 = no):</label>
+            <input type="number" id="active" name="active" required>
+
+            <button type="submit" class="btn">Predict</button>
+        </form>
+
+        {% if prediction_text %}
+        <div class="result">
+            {{ prediction_text }}
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
