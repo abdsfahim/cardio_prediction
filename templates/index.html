@@ -20,10 +20,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Change from center to allow scrolling */
-            min-height: 100vh; /* Set minimum height to 100% */
-            padding: 20px; /* Add padding to ensure space around edges */
-            overflow-y: auto; /* Enable scrolling */
+            justify-content: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-y: auto;
         }
 
         h1 {
@@ -48,13 +48,13 @@
             display: inline-block;
         }
 
-        input[type="text"], input[type="number"] {
+        input[type="text"], input[type="number"], select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
             border-radius: 5px;
             border: 1px solid #ccc;
-            font-size: 16px; /* Ensure good readability on mobile */
+            font-size: 16px;
         }
 
         .btn {
@@ -92,7 +92,7 @@
                 font-size: 24px;
             }
 
-            input[type="text"], input[type="number"] {
+            input[type="text"], input[type="number"], select {
                 font-size: 14px;
                 padding: 8px;
             }
@@ -108,14 +108,17 @@
     <div class="container">
         <h1>Smart Cardiovascular Disease Prediction System</h1>
 
-        <form action="/predict" method="POST">
-            <label for="age">Age (in days):</label>
+        <form id="predictionForm" action="/predict" method="POST" onsubmit="handleSubmit(event)">
+            <label for="age">Age (in years):</label>
             <input type="number" id="age" name="age" required>
 
-            <label for="gender">Gender (1 = Male, 2 = Female):</label>
-            <input type="number" id="gender" name="gender" required>
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="1">Male</option>
+                <option value="2">Female</option>
+            </select>
 
-            <label for="height">Height (cm):</label>
+            <label for="height">Height (in inches):</label>
             <input type="number" id="height" name="height" required>
 
             <label for="weight">Weight (kg):</label>
@@ -127,30 +130,121 @@
             <label for="ap_lo">Diastolic BP (ap_lo):</label>
             <input type="number" id="ap_lo" name="ap_lo" required>
 
-            <label for="cholesterol">Cholesterol (1 = normal, 2 = above normal, 3 = well above normal):</label>
-            <input type="number" id="cholesterol" name="cholesterol" required>
+            <label for="cholesterol">Cholesterol:</label>
+            <select id="cholesterol" name="cholesterol" required>
+                <option value="1">Normal</option>
+                <option value="2">Above normal</option>
+                <option value="3">Well above normal</option>
+            </select>
 
-            <label for="gluc">Glucose (1 = normal, 2 = above normal, 3 = well above normal):</label>
-            <input type="number" id="gluc" name="gluc" required>
+            <label for="gluc">Glucose:</label>
+            <select id="gluc" name="gluc" required>
+                <option value="1">Normal</option>
+                <option value="2">Above normal</option>
+                <option value="3">Well above normal</option>
+            </select>
 
-            <label for="smoke">Smoke (1 = yes, 0 = no):</label>
-            <input type="number" id="smoke" name="smoke" required>
+            <label for="smoke">Smoke:</label>
+            <select id="smoke" name="smoke" required>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
 
-            <label for="alco">Alcohol Intake (1 = yes, 0 = no):</label>
-            <input type="number" id="alco" name="alco" required>
+            <label for="alco">Alcohol Intake:</label>
+            <select id="alco" name="alco" required>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
 
-            <label for="active">Physical Activity (1 = yes, 0 = no):</label>
-            <input type="number" id="active" name="active" required>
+            <label for="active">Physical Activity:</label>
+            <select id="active" name="active" required>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
 
             <button type="submit" class="btn">Predict</button>
         </form>
 
-        {% if prediction_text %}
-        <div class="result">
-            {{ prediction_text }}
+        <div id="result" class="result" style="display: none;">
+            <h2>Prediction Result:</h2>
+            <p id="predictionText"></p>
+            <p id="inputSummary"></p>
         </div>
-        {% endif %}
     </div>
+
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Retrieve input values
+            const ageInYears = document.getElementById("age").value;
+            const gender = document.getElementById("gender").value;
+            const heightInInches = document.getElementById("height").value;
+            const weight = document.getElementById("weight").value;
+            const ap_hi = document.getElementById("ap_hi").value;
+            const ap_lo = document.getElementById("ap_lo").value;
+            const cholesterol = document.getElementById("cholesterol").value;
+            const gluc = document.getElementById("gluc").value;
+            const smoke = document.getElementById("smoke").value;
+            const alco = document.getElementById("alco").value;
+            const active = document.getElementById("active").value;
+
+            // Convert age from years to days
+            const ageInDays = ageInYears * 365;
+
+            // Convert height from inches to centimeters
+            const heightInCm = heightInInches * 2.54;
+
+            // Prepare the data to send to the backend
+            const formData = {
+                age: ageInDays,
+                gender: gender,
+                height: heightInCm,
+                weight: weight,
+                ap_hi: ap_hi,
+                ap_lo: ap_lo,
+                cholesterol: cholesterol,
+                gluc: gluc,
+                smoke: smoke,
+                alco: alco,
+                active: active
+            };
+
+            // Simulate form submission and display result (you would use an actual form submission in production)
+            displayResult(formData);
+        }
+
+        function displayResult(data) {
+            const resultDiv = document.getElementById("result");
+            const predictionText = document.getElementById("predictionText");
+            const inputSummary = document.getElementById("inputSummary");
+
+            // Simulate prediction result
+            const prediction = "Risk of Cardiovascular Disease: Low";
+
+            // Show the prediction result
+            predictionText.textContent = prediction;
+
+            // Display the input summary
+            inputSummary.innerHTML = `
+                <strong>Input Summary:</strong><br>
+                Age: ${data.age} days<br>
+                Gender: ${data.gender == 1 ? "Male" : "Female"}<br>
+                Height: ${data.height} cm<br>
+                Weight: ${data.weight} kg<br>
+                Systolic BP: ${data.ap_hi}<br>
+                Diastolic BP: ${data.ap_lo}<br>
+                Cholesterol: ${data.cholesterol}<br>
+                Glucose: ${data.gluc}<br>
+                Smoke: ${data.smoke == 1 ? "Yes" : "No"}<br>
+                Alcohol Intake: ${data.alco == 1 ? "Yes" : "No"}<br>
+                Physical Activity: ${data.active == 1 ? "Yes" : "No"}
+            `;
+
+            // Show the result section
+            resultDiv.style.display = "block";
+        }
+    </script>
 
 </body>
 </html>
